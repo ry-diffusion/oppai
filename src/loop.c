@@ -1,6 +1,8 @@
 #include <oppai.h>
 
 static bool isEnabled = false;
+static u64 lastTick = 0;
+static bool shouldIgnoreClick = false;
 
 static bool handleDevice(Input device, struct input_event event,
 			 unique(Oppai) oppai)
@@ -15,8 +17,26 @@ static bool handleDevice(Input device, struct input_event event,
 	}
 
 	if (!isEnabled) return false;
-
 	if (event.code != BTN_LEFT && event.code != BTN_RIGHT) return false;
+	if (oppai->enviroment.isDynamicCPSEnabled)
+	{
+		if ((now() - lastTick) > oppai->enviroment.dynamicCPSDeadline)
+		{
+			LOG_DEBUG("DynamicCPS: Clicking normally");
+
+			shouldIgnoreClick = true;
+		}
+		else
+		{
+			LOG_DEBUG("DynamicCPS: Autoclicker enabled");
+
+			shouldIgnoreClick = false;
+		}
+
+		lastTick = now();
+	}
+
+	if (shouldIgnoreClick) return false;
 
 	for (int i = 0; i < 2; ++i)
 	{
@@ -63,15 +83,14 @@ void* deviceLoop(void* threadContextPtr)
 bool loop(unique(Oppai) oppai)
 {
 	byte idx = 0;
-	struct WorkerContext contexts[MAX_DEVICES] = {{
-	    .oppai = *oppai,
-	}};
+	struct WorkerContext contexts[MAX_DEVICES] = {0};
 
 	for (idx = 0; idx < oppai->devicesFound; ++idx)
 	{
 		Input device = oppai->devices[idx];
 
 		contexts[idx].input = device;
+		contexts[idx].oppai = *oppai;
 
 		pthread_create(&oppai->threads[idx], NULL, deviceLoop,
 			       &contexts[idx]);

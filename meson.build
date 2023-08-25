@@ -5,7 +5,7 @@ project('oppai', 'c',
 evdev_dep = dependency('libevdev')
 
 exe = executable('oppai', [ 'src/main.c', 'src/enviroment.c',
-			    'src/check.c', 'src/input.c', 'src/loop.c' ],
+			    'src/utils.c', 'src/input.c', 'src/loop.c' ],
 	dependencies : [evdev_dep],
 	include_directories : 'inc',
 	install : true)

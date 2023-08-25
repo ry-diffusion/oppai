@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <types.h>
 #include <unistd.h>
@@ -28,6 +29,8 @@
 typedef struct Enviroment
 {
 	u8 toggleKey;
+	bool isDynamicCPSEnabled;
+	u64 dynamicCPSDeadline;
 } Enviroment;
 
 typedef struct Input
@@ -55,3 +58,4 @@ void loadEnviroment(unique(Enviroment) target);
 bool iAmRoot(void);
 bool scanDevices(unique(Oppai) context);
 bool loop(unique(Oppai) oppai);
+u64 now(void);

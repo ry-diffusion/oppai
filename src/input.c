@@ -60,13 +60,7 @@ bool scanDevices(unique(Oppai) context)
 
 		if (entry->d_name[0] != 'e') continue;
 		if (!openDevice(path, &context->devices[idx], context))
-		{
-			/*LOG_DEBUG("Unable to open device %s cuz %s", path,
-				  strerror(errno));
-				  */
-
 			continue;
-		}
 
 		LOG_DEBUG("Opened device %s (%s)", path,
 			  libevdev_get_name(context->devices[idx].hDevice));

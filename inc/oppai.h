@@ -43,7 +43,6 @@ typedef struct Context
 	pthread_t threads[MAX_DEVICES];
 
 	byte devicesFound;
-	bool isEnabled;
 } Oppai;
 
 struct WorkerContext

@@ -1,10 +1,10 @@
 project('oppai', 'c',
   version : '0.1',
-  default_options : ['warning_level=3'])
+  default_options : ['warning_level=3', 'c_std=c11'])
 
 evdev_dep = dependency('libevdev')
 
-exe = executable('oppai', [ 'src/main.c', 'src/cli.c',
+exe = executable('oppai', [ 'src/main.c', 'src/cli.c', 'src/log.c',
 			    'src/utils.c', 'src/input.c', 'src/loop.c' ],
 	dependencies : [evdev_dep],
 	include_directories : 'inc',

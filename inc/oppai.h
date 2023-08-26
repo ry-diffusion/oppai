@@ -18,14 +18,9 @@
 
 #define __LOG__PREFIX(level, contents) level " " __FILE__ ": " contents "\n"
 
-#define LOG_ERR(fmt, ...) \
-	fprintf(stderr, __LOG__PREFIX("err  ", fmt), ##__VA_ARGS__)
-
-#define LOG_INFO(fmt, ...) \
-	fprintf(stderr, __LOG__PREFIX("info ", fmt), ##__VA_ARGS__)
-
-#define LOG_DEBUG(fmt, ...) \
-	fprintf(stderr, __LOG__PREFIX("debug", fmt), ##__VA_ARGS__)
+#define LOG_ERR(...) executeLog(ERROR, __VA_ARGS__)
+#define LOG_INFO(...) executeLog(INFO, __VA_ARGS__)
+#define LOG_DEBUG(...) executeLog(DEBUG, __VA_ARGS__)
 
 typedef struct Enviroment
 {
@@ -55,6 +50,14 @@ struct WorkerContext
 	Oppai oppai;
 };
 
+typedef enum LogLevel
+{
+	ERROR,
+	INFO,
+	DEBUG
+} LogLevel;
+
+void executeLog(LogLevel level, ...);
 bool parseCLI(unique(Enviroment) target, const u16 argc, list(slice) argv);
 
 bool iAmRoot(void);

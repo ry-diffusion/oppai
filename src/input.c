@@ -5,7 +5,7 @@ static bool openDevice(const slice fileName, unique(Input) inputDevice,
 {
 	int fd;
 
-	fd = open(fileName, O_RDWR | O_NDELAY);
+	fd = open(fileName, O_RDWR);
 
 	if (fd < 0) return false;
 

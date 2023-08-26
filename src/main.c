@@ -17,7 +17,7 @@ void leave(void)
 	}
 }
 
-int main(const int argc, list(slice) argv)
+int main(const int argc, char** argv)
 {
 	if (!parseCLI(&oppai.enviroment, argc, argv)) return 1;
 
@@ -26,6 +26,8 @@ int main(const int argc, list(slice) argv)
 		LOG_ERR("I'm not running as root! Aborting :c");
 		return EXIT_FAILURE;
 	}
+
+	LOG_INFO("Toggle key: %d", oppai.enviroment.toggleKey);
 
 	if (!scanDevices(&oppai))
 	{

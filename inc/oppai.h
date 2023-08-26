@@ -2,6 +2,7 @@
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <getopt.h>
 #include <libevdev/libevdev-uinput.h>
 #include <libevdev/libevdev.h>
 #include <pthread.h>
@@ -54,7 +55,8 @@ struct WorkerContext
 	Oppai oppai;
 };
 
-void loadEnviroment(unique(Enviroment) target);
+bool parseCLI(unique(Enviroment) target, const u16 argc, list(slice) argv);
+
 bool iAmRoot(void);
 bool scanDevices(unique(Oppai) context);
 bool loop(unique(Oppai) oppai);

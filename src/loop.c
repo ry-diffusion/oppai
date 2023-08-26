@@ -59,9 +59,10 @@ static bool handleDevice(Input device, struct input_event event,
 void* deviceLoop(void* threadContextPtr)
 {
 	struct WorkerContext context = *(struct WorkerContext*)threadContextPtr;
+	struct input_event event;
+
 	Input device = context.input;
 	Oppai oppai = context.oppai;
-	struct input_event event;
 
 	libevdev_grab(device.hDevice, LIBEVDEV_GRAB);
 
@@ -71,10 +72,8 @@ void* deviceLoop(void* threadContextPtr)
 				    &event);
 
 		if (!handleDevice(device, event, &oppai))
-		{
 			libevdev_uinput_write_event(device.uDevice, event.type,
 						    event.code, event.value);
-		}
 	}
 
 	return NULL;
@@ -83,6 +82,8 @@ void* deviceLoop(void* threadContextPtr)
 bool loop(unique(Oppai) oppai)
 {
 	byte idx = 0;
+	void* ret;
+
 	struct WorkerContext contexts[MAX_DEVICES] = {0};
 
 	for (idx = 0; idx < oppai->devicesFound; ++idx)
@@ -97,11 +98,7 @@ bool loop(unique(Oppai) oppai)
 	}
 
 	for (idx = 0; idx < oppai->devicesFound; ++idx)
-	{
-		void* ret;
-
 		pthread_join(oppai->threads[idx], &ret);
-	}
 
 	return true;
 }

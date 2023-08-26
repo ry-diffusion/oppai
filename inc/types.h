@@ -3,6 +3,7 @@
 #define true 1
 #define false 0
 #define unique(type) type* const restrict
+#define list(type) unique(type)
 
 typedef unsigned char byte;
 typedef unsigned char bool;

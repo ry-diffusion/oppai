@@ -42,7 +42,9 @@ bool scanDevices(unique(Oppai) context)
 {
 	DIR* dInput;
 	byte idx = 0;
+
 	struct dirent* entry;
+
 	dInput = opendir("/dev/input");
 
 	if (!dInput)

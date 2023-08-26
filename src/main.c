@@ -1,5 +1,11 @@
 #include <oppai.h>
-Oppai oppai;
+
+Oppai oppai = {.devices = {{0}},
+	       .devicesFound = 0,
+	       .enviroment = {.dynamicCPSDeadline = 100,
+			      .isDynamicCPSEnabled = false,
+			      .toggleKey = 0},
+	       .threads = {0}};
 
 void leave(void)
 {
@@ -10,10 +16,11 @@ void leave(void)
 		libevdev_uinput_destroy(oppai.devices[idx].uDevice);
 	}
 }
-int main(void)
+
+int main(const int argc, list(slice) argv)
 {
-	loadEnviroment(&oppai.enviroment);
-	atexit(leave);
+	if (!parseCLI(&oppai.enviroment, argc, argv)) return 1;
+
 	if (!iAmRoot())
 	{
 		LOG_ERR("I'm not running as root! Aborting :c");
@@ -26,6 +33,7 @@ int main(void)
 		return EXIT_FAILURE;
 	}
 
+	atexit(leave);
 	if (!loop(&oppai))
 	{
 		LOG_ERR("Loop finished");

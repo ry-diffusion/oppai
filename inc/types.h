@@ -20,4 +20,4 @@ typedef unsigned long int u64;
 typedef float f32;
 typedef double f64;
 
-typedef char* restrict slice;
+typedef unique(char) slice;

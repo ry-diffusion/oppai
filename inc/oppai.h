@@ -1,4 +1,5 @@
 #pragma once
+
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -16,12 +17,9 @@
 
 #define MAX_DEVICES 128
 
-#define __LOG__PREFIX(level, contents) level " " __FILE__ ": " contents "\n"
-
 #define LOG_ERR(...) executeLog(ERROR, __VA_ARGS__)
 #define LOG_INFO(...) executeLog(INFO, __VA_ARGS__)
 #define LOG_DEBUG(...) executeLog(DEBUG, __VA_ARGS__)
-
 typedef struct Enviroment
 {
 	u8 toggleKey;
@@ -56,6 +54,11 @@ typedef enum LogLevel
 	INFO,
 	DEBUG
 } LogLevel;
+
+static inline bool max(int a, int b)
+{
+	return a > b ? a : b;
+}
 
 void executeLog(LogLevel level, ...);
 bool parseCLI(unique(Enviroment) target, const u16 argc, list(slice) argv);

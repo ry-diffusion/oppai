@@ -7,7 +7,8 @@ static bool shouldIgnoreClick = false;
 static bool handleDevice(Input device, struct input_event event,
 			 unique(Oppai) oppai)
 {
-	if (event.type != EV_KEY) return false;
+	if (event.type != EV_KEY || !isEnabled) return false;
+	if (event.code != BTN_LEFT && event.code != BTN_RIGHT) return false;
 
 	if (event.code == oppai->enviroment.toggleKey && event.value)
 	{
@@ -16,8 +17,6 @@ static bool handleDevice(Input device, struct input_event event,
 		return true;
 	}
 
-	if (!isEnabled) return false;
-	if (event.code != BTN_LEFT && event.code != BTN_RIGHT) return false;
 	if (oppai->enviroment.isDynamicCPSEnabled)
 	{
 		if ((now() - lastTick) > oppai->enviroment.dynamicCPSDeadline)

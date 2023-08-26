@@ -56,9 +56,8 @@ bool scanDevices(unique(Oppai) context)
 
 	while ((entry = readdir(dInput)))
 	{
-		char path[256] = {0};
-		strcpy(path, "/dev/input/");
-		strcat(path, entry->d_name);
+		char path[256 + 12] = "/dev/input/";
+		strncat(path, entry->d_name, max(255, strlen(entry->d_name)));
 
 		if (entry->d_name[0] != 'e') continue;
 		if (!openDevice(path, &context->devices[idx], context))

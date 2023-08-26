@@ -8,7 +8,7 @@ static struct option OPTIONS[] = {
     {0, 0, 0, 0}};
 
 static const slice HELP_TEXT =
-    "Oppai - v0.1-snapshot\n"
+    "Oppai - v0.2-snapshot\n"
     "USAGE: \n"
     " --nodynamiccps [-d]: Disables Dynamic CPS System\n"
     " --dynamiccpsdeadline [-l] {DEADLINE}: Sets DCPS Deadline\n"

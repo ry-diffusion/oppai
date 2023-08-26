@@ -4,8 +4,9 @@ void executeLog(LogLevel level, ...)
 {
 	va_list va;
 	time_t stamp;
-	slice now;
 	struct tm* timeinfo;
+
+	char* now;
 	char* logLevel;
 
 	time(&stamp);

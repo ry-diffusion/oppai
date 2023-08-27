@@ -8,7 +8,8 @@ static struct option OPTIONS[] = {
     {0, 0, 0, 0}};
 
 static const slice HELP_TEXT =
-    "Oppai - v0.2-snapshot\n"
+    "Oppai v" OPPAI_VERSION
+    "\n"
     "USAGE: \n"
     " --nodynamiccps [-d]: Disables Dynamic CPS System\n"
     " --dynamiccpsdeadline [-l] {DEADLINE}: Sets DCPS Deadline\n"
@@ -29,13 +30,18 @@ bool parseCLI(unique(Enviroment) target, const u16 argc, list(slice) argv)
 		switch (option)
 		{
 			case 'l':
-				target->dynamicCPSDeadline = atoi(optarg);
+				if (!optarg) goto error;
+
+				target->dynamicCPSDeadline =
+				    strtol(optarg, NULL, 10);
 				break;
 			case 'd':
 				target->isDynamicCPSEnabled = false;
 				break;
 			case 'k':
-				target->toggleKey = atoi(optarg);
+				if (!optarg) goto error;
+
+				target->toggleKey = strtol(optarg, NULL, 10);
 				break;
 
 			case 0:

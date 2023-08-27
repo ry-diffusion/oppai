@@ -1,5 +1,5 @@
 #pragma once
-
+#define _GNU_SOURCE
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -15,11 +15,19 @@
 #include <types.h>
 #include <unistd.h>
 
+#include "oppai_const.h"
+
 #define MAX_DEVICES 128
 
-#define LOG_ERR(...) executeLog(ERROR, __VA_ARGS__)
-#define LOG_INFO(...) executeLog(INFO, __VA_ARGS__)
-#define LOG_DEBUG(...) executeLog(DEBUG, __VA_ARGS__)
+#define LOG_ERR(...) executeLog(ERROR, ##__VA_ARGS__)
+#define LOG_INFO(...) executeLog(INFO, ##__VA_ARGS__)
+
+#if defined(BUILD_DEBUG)
+#define LOG_DEBUG(...) executeLog(DEBUG, ##__VA_ARGS__)
+#else
+#define LOG_DEBUG(...)
+#endif
+
 typedef struct Enviroment
 {
 	u8 toggleKey;
@@ -65,5 +73,5 @@ bool parseCLI(unique(Enviroment) target, const u16 argc, list(slice) argv);
 
 bool iAmRoot(void);
 bool scanDevices(unique(Oppai) context);
-bool loop(unique(Oppai) oppai);
+bool startWorkers(unique(Oppai) oppai);
 u64 now(void);

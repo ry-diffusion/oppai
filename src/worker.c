@@ -18,21 +18,14 @@ static bool handleDevice(Input device, struct input_event event,
 
 	if (!isEnabled) return false;
 	if (event.code != BTN_LEFT && event.code != BTN_RIGHT) return false;
-
 	if (oppai->enviroment.isDynamicCPSEnabled)
 	{
-		if ((now() - lastTick) > oppai->enviroment.dynamicCPSDeadline)
-		{
-			LOG_DEBUG("DynamicCPS: Clicking normally");
+		shouldIgnoreClick =
+		    (now() - lastTick) > oppai->enviroment.dynamicCPSDeadline;
 
-			shouldIgnoreClick = true;
-		}
-		else
-		{
-			LOG_DEBUG("DynamicCPS: Autoclicker enabled");
-
-			shouldIgnoreClick = false;
-		}
+		LOG_DEBUG(shouldIgnoreClick
+			      ? "DynamicCPS: Clicking normally"
+			      : "DynamicCPS: Autoclicker enabled");
 
 		lastTick = now();
 	}
@@ -57,20 +50,36 @@ static bool handleDevice(Input device, struct input_event event,
 	return true;
 }
 
-void* deviceLoop(void* threadContextPtr)
+static void* deviceWorker(void* threadContextPtr)
 {
 	struct WorkerContext context = *(struct WorkerContext*)threadContextPtr;
 	struct input_event event;
 
+	char taskBuf[15] = {0};
+
 	Input device = context.input;
 	Oppai oppai = context.oppai;
+
+	int error;
+
+	strncpy(taskBuf, libevdev_get_name(device.hDevice), 15);
+
+	pthread_setname_np(pthread_self(), taskBuf);
 
 	libevdev_grab(device.hDevice, LIBEVDEV_GRAB);
 
 	while (true)
 	{
-		libevdev_next_event(device.hDevice, LIBEVDEV_READ_FLAG_NORMAL,
-				    &event);
+		if ((error = libevdev_next_event(
+			 device.hDevice, LIBEVDEV_READ_FLAG_BLOCKING, &event)) <
+		    0)
+		{
+			LOG_ERR(
+			    "An error ocurried when waiting for a event: %s",
+			    strerror(error));
+
+			continue;
+		}
 
 		if (!handleDevice(device, event, &oppai))
 			libevdev_uinput_write_event(device.uDevice, event.type,
@@ -80,7 +89,7 @@ void* deviceLoop(void* threadContextPtr)
 	return NULL;
 }
 
-bool loop(unique(Oppai) oppai)
+bool startWorkers(unique(Oppai) oppai)
 {
 	byte idx = 0;
 	void* ret;
@@ -94,7 +103,7 @@ bool loop(unique(Oppai) oppai)
 		contexts[idx].input = device;
 		contexts[idx].oppai = *oppai;
 
-		pthread_create(&oppai->threads[idx], NULL, deviceLoop,
+		pthread_create(&oppai->threads[idx], NULL, deviceWorker,
 			       &contexts[idx]);
 	}
 

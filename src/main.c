@@ -11,7 +11,7 @@ void leave(void)
 {
 	for (int idx = 0; idx < oppai.devicesFound; ++idx)
 	{
-		libevdev_grab(oppai.devices[idx].hDevice, false);
+		libevdev_grab(oppai.devices[idx].hDevice, LIBEVDEV_UNGRAB);
 		libevdev_free(oppai.devices[idx].hDevice);
 		libevdev_uinput_destroy(oppai.devices[idx].uDevice);
 	}
@@ -19,6 +19,7 @@ void leave(void)
 
 int main(const int argc, char** argv)
 {
+	close(STDIN_FILENO);
 	if (!parseCLI(&oppai.enviroment, argc, argv)) return 1;
 
 	if (!iAmRoot())
@@ -36,7 +37,7 @@ int main(const int argc, char** argv)
 	}
 
 	atexit(leave);
-	if (!loop(&oppai))
+	if (!startWorkers(&oppai))
 	{
 		LOG_ERR("Loop finished");
 		return EXIT_FAILURE;

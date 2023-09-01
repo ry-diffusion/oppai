@@ -1,10 +1,10 @@
 project('oppai', 'c',
-  version : '23.08u-snapshot',
+  version : '23.09u-snapshot',
   default_options : ['warning_level=3', 'c_std=c11'])
 
 evdev_dep = dependency('libevdev')
 conf_data = configuration_data()
-conf_data.set('version','23.8u-snapshot')
+conf_data.set('version','23.09u-snapshot')
 
 configure_file(input : 'inc/oppai_const.h.in',
                output : 'oppai_const.h',

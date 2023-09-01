@@ -1,6 +1,5 @@
 # vi: ft=yaml
-AlignConsecutiveBitFields:
-  Enabled: true
+
 AllowShortFunctionsOnASingleLine: None
 AllowShortLambdasOnASingleLine: Empty
 BreakBeforeBraces: Allman
@@ -9,4 +8,3 @@ IndentWidth: 8
 UseTab: Always
 TabWidth: 8
 BasedOnStyle: Google
-

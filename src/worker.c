@@ -63,10 +63,8 @@ static void* deviceWorker(void* threadContextPtr)
 	int error;
 
 	strncpy(taskBuf, libevdev_get_name(device.hDevice), 15);
-
-	pthread_setname_np(pthread_self(), taskBuf);
-
 	libevdev_grab(device.hDevice, LIBEVDEV_GRAB);
+	pthread_setname_np(pthread_self(), taskBuf);
 
 	while (true)
 	{

@@ -36,6 +36,7 @@ int main(const int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
+	setScheduler();
 	atexit(leave);
 	if (!startWorkers(&oppai))
 	{

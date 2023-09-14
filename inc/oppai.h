@@ -7,6 +7,7 @@
 #include <libevdev/libevdev-uinput.h>
 #include <libevdev/libevdev.h>
 #include <pthread.h>
+#include <sched.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +18,7 @@
 
 #include "oppai_const.h"
 
-#define MAX_DEVICES 128
+#define MAX_DEVICES 127
 
 #define LOG_ERR(...) executeLog(ERROR, ##__VA_ARGS__)
 #define LOG_INFO(...) executeLog(INFO, ##__VA_ARGS__)
@@ -63,14 +64,14 @@ typedef enum LogLevel
 	DEBUG
 } LogLevel;
 
-static inline bool max(int a, int b)
+__attribute_used__ static inline bool max(int a, int b)
 {
 	return a > b ? a : b;
 }
 
 void executeLog(LogLevel level, ...);
 bool parseCLI(unique(Enviroment) target, const u16 argc, list(slice) argv);
-
+void setScheduler(void);
 bool iAmRoot(void);
 bool scanDevices(unique(Oppai) context);
 bool startWorkers(unique(Oppai) oppai);

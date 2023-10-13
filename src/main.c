@@ -9,7 +9,7 @@ Oppai oppai = {.devices = {{0}},
 
 void leave(void)
 {
-	for (int idx = 0; idx < oppai.devicesFound; ++idx)
+	for (byte idx = 0; idx < oppai.devicesFound; ++idx)
 	{
 		libevdev_grab(oppai.devices[idx].hDevice, LIBEVDEV_UNGRAB);
 		libevdev_free(oppai.devices[idx].hDevice);
@@ -36,11 +36,15 @@ int main(const int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	setScheduler();
+	if (!setScheduler())
+		LOG_ERR(
+		    "Unable to set scheduler! Your friend input-lag appears!");
+
 	atexit(leave);
+
 	if (!startWorkers(&oppai))
 	{
-		LOG_ERR("Loop finished");
+		LOG_ERR("An unknown error occuried in works. Bye!");
 		return EXIT_FAILURE;
 	}
 

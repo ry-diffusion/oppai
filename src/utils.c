@@ -5,16 +5,13 @@ bool iAmRoot(void)
 	return !getuid();
 }
 
-void setScheduler(void)
+bool setScheduler(void)
 {
 	struct sched_param param = {.sched_priority =
 					sched_get_priority_max(SCHED_RR)};
-	if (sched_setscheduler(getpid(), SCHED_RR, &param) < 0)
-	{
-		LOG_ERR("Unable to set scheduler! Your input may be wrong!");
-	}
-}
 
+	return sched_setscheduler(getpid(), SCHED_RR, &param) == 0;
+}
 u64 now(void)
 {
 	struct timeval onceUponATime;

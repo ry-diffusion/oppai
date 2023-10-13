@@ -71,7 +71,7 @@ __attribute_used__ static inline bool max(int a, int b)
 
 void executeLog(LogLevel level, ...);
 bool parseCLI(unique(Enviroment) target, const u16 argc, list(slice) argv);
-void setScheduler(void);
+bool setScheduler(void);
 bool iAmRoot(void);
 bool scanDevices(unique(Oppai) context);
 bool startWorkers(unique(Oppai) oppai);

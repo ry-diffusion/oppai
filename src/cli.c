@@ -24,7 +24,7 @@ bool parseCLI(unique(Enviroment) target, const u16 argc, list(slice) argv)
 	int optionIndex = 0;
 	char option;
 
-	while ((option = getopt_long(argc, (char **)argv, "kdl:", OPTIONS,
+	while ((option = getopt_long(argc, (char **)argv, "l:k:d", OPTIONS,
 				     &optionIndex)) != -1)
 	{
 		switch (option)

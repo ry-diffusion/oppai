@@ -4,14 +4,13 @@ void executeLog(LogLevel level, ...)
 {
 	va_list va;
 	time_t stamp;
-	struct tm* timeinfo;
+	struct tm* info;
 
-	char* now;
-	char* logLevel;
+	char *now, *logLevel;
 
 	time(&stamp);
-	timeinfo = localtime(&stamp);
-	now = asctime(timeinfo);
+	info = localtime(&stamp);
+	now = asctime(info);
 
 	now[strlen(now) - 1] = '\0';
 	va_start(va, level);

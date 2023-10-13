@@ -32,7 +32,7 @@ static bool handleDevice(Input device, struct input_event event,
 
 	if (shouldIgnoreClick) return false;
 
-	for (int i = 0; i < 2; ++i)
+	for (byte i = 0; i < 2; ++i)
 	{
 		libevdev_uinput_write_event(device.uDevice, EV_KEY, event.code,
 					    1);
@@ -56,11 +56,10 @@ static void* deviceWorker(void* threadContextPtr)
 	struct input_event event;
 
 	char taskBuf[15] = {0};
+	int error;
 
 	Input device = context.input;
 	Oppai oppai = context.oppai;
-
-	int error;
 
 	strncpy(taskBuf, libevdev_get_name(device.hDevice), 15);
 	libevdev_grab(device.hDevice, LIBEVDEV_GRAB);

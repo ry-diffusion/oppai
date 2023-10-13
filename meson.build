@@ -4,7 +4,7 @@ project('oppai', 'c',
 
 evdev_dep = dependency('libevdev')
 conf_data = configuration_data()
-conf_data.set('version','23.09u-snapshot')
+conf_data.set('version','23.10u-snapshot')
 
 configure_file(input : 'inc/oppai_const.h.in',
                output : 'oppai_const.h',
